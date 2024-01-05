@@ -1,0 +1,30 @@
+<?php
+$jobCollection = $this->getLoadedJobCollection();
+$iterator = 1;
+$total = count($jobCollection);
+?>
+
+<div class="job-wrapper">
+    <ol class="jobs list">
+        <?php foreach($jobCollection AS $job): ?>
+            <li class="item<?php echo ($iterator == 1) ? ' first' : ''; ?><?php echo ($total == $iterator) ? ' last' : ''; ?>">
+                <div class="title">
+                    <a href="<?php echo $this->getJobUrl($job); ?>" title="<?php echo $job->getTitle(); ?>">
+                        <?php echo $job->getTitle(); ?>
+                    </a>
+                </div>
+                <div class="department_name">
+                    <?php echo __('Department : '); ?>
+                    <a href="<?php echo $this->getDepartmentUrl($job); ?>" title="<?php echo $job->getDepartmentName(); ?>">
+                        <?php echo $job->getDepartmentName(); ?>
+                    </a>
+                </div>
+                <div class="type"><?php echo $job->getType(); ?></div>
+                <div class="location"><?php echo $job->getLocation(); ?></div>
+                <div class="date"><?php echo $this->formatDate($job->getDate()); ?></div>
+                <div class="description"><?php echo $job->getDescription(); ?></div>
+            </li>
+            <?php $iterator++; ?>
+        <?php endforeach; ?>
+    </ol>
+</div>

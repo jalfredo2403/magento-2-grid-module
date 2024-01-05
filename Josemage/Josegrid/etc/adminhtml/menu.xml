@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Josemage_Josegrid::job_head" title="Jose Magento Jobs" module="Josemage_Josegrid" sortOrder="100" parent="Magento_Backend::content" resource="Josemage_Josegrid::job_head" />
+        <add id="Josemage_Josegrid::department" title="Departments" module="Josemage_Josegrid" sortOrder="10" parent="Josemage_Josegrid::job_head" action="jobs/department" resource="Josemage_Josegrid::department" />
+        <add id="Josemage_Josegrid::job" title="Jobs" module="Josemage_Josegrid" sortOrder="20" parent="Josemage_Josegrid::job_head" action="jobs/job" resource="Josemage_Josegrid::job" />
+    </menu>
+</config>
