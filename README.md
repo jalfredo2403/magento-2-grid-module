@@ -1,3 +1,4 @@
+
 # Magento 2 UI component in the admin
    Create a GRID by scratch <p>
    Create  complete CRUD, using model, resource model and collection.<p>
@@ -18,5 +19,3 @@ CONTENT/Jose Magento Jobs/Department and you can worked with the complete admin 
 # In frontend<p>
 got to the url:
 urlsite//jobs/job
-
-
