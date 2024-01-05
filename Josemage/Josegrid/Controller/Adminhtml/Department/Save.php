@@ -2,13 +2,23 @@
 namespace Josemage\Josegrid\Controller\Adminhtml\Department;
 
 use Magento\Backend\App\Action;
+use \Josemage\Josegrid\Model\DepartmentFactory as DepartamentModelFactory;
+use \Josemage\Josegrid\Model\ResourceModel\DepartmentFactory as DepartamentResourceModelFactory;
 
+/**
+ *
+ */
 class Save extends Action
 {
     /**
-     * @var \Josemage\Josegrid\Model\Department
+     * @var DepartamentModelFactory
      */
-    protected $_model;
+    protected $departamentModelFactory;
+
+    /**
+     * @var DepartamentResourceModelFactory
+     */
+    protected $departamentResourceModelFactory;
 
     /**
      * @param Action\Context $context
@@ -16,10 +26,12 @@ class Save extends Action
      */
     public function __construct(
         Action\Context $context,
-        \Josemage\Josegrid\Model\Department $model
+        DepartamentModelFactory $departamentModelFactory,
+        DepartamentResourceModelFactory $departamentResourceModelFactory,
     ) {
         parent::__construct($context);
-        $this->_model = $model;
+        $this->departamentModelFactory = $departamentModelFactory;
+        $this->departamentResourceModelFactory = $departamentResourceModelFactory;
     }
 
     /**
@@ -41,34 +53,32 @@ class Save extends Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-            $model = $this->_model;
-
+            $model = $this->departamentModelFactory->create();
+            $resourceModel = $this->departamentResourceModelFactory->create();
             $id = $this->getRequest()->getParam('id');
             if ($id) {
-                $model->load($id);
+                $resourceModel->load($model, $id);
             }
-
-            $model->setData($data);
-
+           $model->setData($data);
             $this->_eventManager->dispatch(
                 'jobs_department_prepare_save',
                 ['deparment' => $model, 'request' => $this->getRequest()]
             );
 
             try {
-                $model->save();
-                $this->messageManager->addSuccess(__('Department saved'));
+                $resourceModel->save($model);
+                $this->messageManager->addSuccessMessage(__('Department saved'));
                 $this->_getSession()->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath('*/*/edit', ['id' => $model->getId(), '_current' => true]);
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\RuntimeException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the department'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the department'));
             }
 
             $this->_getSession()->setFormData($data);

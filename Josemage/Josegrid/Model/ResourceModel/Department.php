@@ -8,6 +8,10 @@ use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
  */
 class Department extends AbstractDb
 {
+    /**
+     *
+     */
+    const MAIN_TABLE = "josegrid_department";
 
     /**
      * Initialize resource model
@@ -17,7 +21,14 @@ class Department extends AbstractDb
     protected function _construct()
     {
         // Table Name and Primary Key column
-        $this->_init('josegrid_department', 'entity_id');
+        $this->_init(static::MAIN_TABLE, 'entity_id');
     }
 
+    /**
+     * @return string
+     */
+    public function getMainTable()
+    {
+        return static::MAIN_TABLE;
+    }
 }

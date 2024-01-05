@@ -2,7 +2,12 @@
 namespace Josemage\Josegrid\Controller\Adminhtml\Department;
 
 use Magento\Backend\App\Action;
+use \Josemage\Josegrid\Model\DepartmentFactory as DepartamentModelFactory;
+use \Josemage\Josegrid\Model\ResourceModel\DepartmentFactory as DepartamentResourceModelFactory;
 
+/**
+ *
+ */
 class Edit extends Action
 {
     /**
@@ -18,25 +23,33 @@ class Edit extends Action
     protected $_resultPageFactory;
 
     /**
-     * @var \Josemage\Josegrid\Model\Department
+     * @var DepartamentModelFactory
      */
-    protected $_model;
+    protected $departamentModelFactory;
+
+    /**
+     * @var DepartamentResourceModelFactory
+     */
+    protected $departamentResourceModelFactory;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Registry $registry
-     * @param \Josemage\Josegrid\Model\Department $model
+     * @param DepartamentModelFactory $departamentModelFactory
+     * @param DepartamentResourceModelFactory $departamentResourceModelFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Registry $registry,
-        \Josemage\Josegrid\Model\Department $model
+        DepartamentModelFactory $departamentModelFactory,
+        DepartamentResourceModelFactory $departamentResourceModelFactory,
     ) {
         $this->_resultPageFactory = $resultPageFactory;
         $this->_coreRegistry = $registry;
-        $this->_model = $model;
+        $this->departamentModelFactory = $departamentModelFactory;
+        $this->departamentResourceModelFactory = $departamentResourceModelFactory;
         parent::__construct($context);
     }
 
@@ -73,13 +86,13 @@ class Edit extends Action
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $model = $this->_model;
-
+        $model = $this->departamentModelFactory->create();
+        $resourceModel = $this->departamentResourceModelFactory->create();
         // If you have got an id, it's edition
         if ($id) {
-            $model->load($id);
+            $resourceModel->load($model, $id);
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This department not exists.'));
+                $this->messageManager->addErrorMessage(__('This department not exists.'));
                 /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
